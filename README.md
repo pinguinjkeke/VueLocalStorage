@@ -24,6 +24,7 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
   Vue.use(VueLocalStorage, {
     name: 'ls',
     bind: true //created computed members from your variable declarations
+    adapter: 'localStorage' // can be either localStorage or sessionStorage
   })
 
   // Use localStorage from Vue object

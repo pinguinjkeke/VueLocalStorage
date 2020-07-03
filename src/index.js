@@ -19,12 +19,19 @@ export default {
     }
 
     let isSupported = true
-
     try {
-      const test = '__vue-localstorage-test__'
-
-      window.localStorage.setItem(test, test)
-      window.localStorage.removeItem(test)
+      let adapter = 'localStorage'
+      if (this.options.adapter) {
+        if (['sessionStorage', 'localStorage'].includes(this.options.adapter)) {
+          adapter = this.options.adapter
+        } else {
+          throw new Error(`${this.options.adapter} is an invalid storage adapter`)
+        }
+      }
+      const testToken = `__vue-${adapter}-test__`
+      window[adapter].setItem(testToken, testToken)
+      window[adapter].removeItem(testToken)
+      vueLocalStorage._adapter = adapter
     } catch (e) {
       isSupported = false
       vueLocalStorage._isSupported = false

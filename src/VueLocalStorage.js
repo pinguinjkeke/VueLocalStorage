@@ -6,6 +6,18 @@ class VueLocalStorage {
     this._properties = {}
     this._namespace = ''
     this._isSupported = true
+    this._adapter = 'localStorage' // Can be either localStorage or sessionStorage
+  }
+
+  /**
+   * Storage adapter to use by default
+   */
+  get storage () {
+    if (this._isSupported) {
+      return window[this._adapter]
+    } else {
+      throw new Error(`Storage of type ${this._adapter} is not supported`)
+    }
   }
 
   /**
@@ -51,7 +63,7 @@ class VueLocalStorage {
       ? JSON.stringify(rawValue)
       : rawValue
 
-    window.localStorage.setItem(key, value)
+    this.storage.setItem(key, value)
   }
 
   /**
@@ -64,7 +76,7 @@ class VueLocalStorage {
   _lsGet (lsKey) {
     const key = this._getLsKey(lsKey)
 
-    return window.localStorage[key]
+    return this.storage[key]
   }
 
   /**
@@ -133,7 +145,7 @@ class VueLocalStorage {
       return null
     }
 
-    return window.localStorage.removeItem(lsKey)
+    return this.storage.removeItem(lsKey)
   }
 
   /**
